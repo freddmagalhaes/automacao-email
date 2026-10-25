@@ -9,3 +9,4 @@ work/
 outputs/
 *.zip
 .ruff_cache/
+ambiente_gpt/
