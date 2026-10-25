@@ -1,0 +1,20 @@
+{
+  "source_directory": "docker/n8n",
+  "originals": {
+    "n8n_01_receptor_gmail.json": "f4f0da2985663842dca1f941a2a1b3a71c9042a85f18e25e2f87e75ced828cb7",
+    "n8n_02_processamento_treinamento_completo.json": "1162fc820aa79cc41e68a5d3795e8b7dc570286e687174f355c48e13a8a32899"
+  },
+  "training_preserved": true,
+  "training_sha256": "a8cdb9a5255c6b648059cef24b0618e9d71ad0c8691e129b1c69fecbf3e846fc",
+  "workflow_ids": [
+    "QCEmailReceptor01",
+    "QCEmailProcesso02",
+    "QCEmailHumano003"
+  ],
+  "knowledge": {
+    "version": "qualitcontrol-base-v2-videos",
+    "context_sha256": "22198d41dd3c6e1ea23661988e3080915853fe3f95fe91d25089ed184e43fa9f",
+    "documents": 26
+  },
+  "effective_training_sha256": "5b6fb69ab3be5f2b60c6e8858103f4c6ec80552f4a209cc901cd0caf7b7eaf2c"
+}

@@ -1,0 +1,158 @@
+name: ${COMPOSE_PROJECT_NAME:-qualitcontrol-email-teste}
+
+x-n8n-environment: &n8n-environment
+  DB_TYPE: postgresdb
+  DB_POSTGRESDB_HOST: postgres
+  DB_POSTGRESDB_PORT: "5432"
+  DB_POSTGRESDB_DATABASE: n8n
+  DB_POSTGRESDB_USER: n8n_app
+  DB_POSTGRESDB_PASSWORD: ${N8N_DB_PASSWORD:?Execute scripts/configure.py}
+  N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY:?Execute scripts/configure.py}
+  N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
+  N8N_HOST: localhost
+  N8N_PORT: "5678"
+  N8N_PROTOCOL: http
+  N8N_EDITOR_BASE_URL: http://localhost:${N8N_PORT:-5679}/
+  N8N_WEBHOOK_URL: http://localhost:${N8N_PORT:-5679}/
+  N8N_SECURE_COOKIE: "false"
+  N8N_DIAGNOSTICS_ENABLED: "false"
+  N8N_PERSONALIZATION_ENABLED: "false"
+  N8N_UNVERIFIED_PACKAGES_ENABLED: "false"
+  N8N_RUNNERS_TASK_TIMEOUT: "300"
+  N8N_BLOCK_ENV_ACCESS_IN_NODE: "false"
+  EXECUTIONS_DATA_PRUNE: "true"
+  EXECUTIONS_DATA_MAX_AGE: "168"
+  GENERIC_TIMEZONE: ${TZ:-America/Sao_Paulo}
+  TZ: ${TZ:-America/Sao_Paulo}
+  AUTOMATION_EMAIL: ${AUTOMATION_EMAIL:-teste@example.invalid}
+  GEMINI_MODEL: ${GEMINI_MODEL:-models/gemini-2.5-flash}
+  ENABLE_EMAIL_SEND: ${ENABLE_EMAIL_SEND:-false}
+  ENABLE_AUTO_REPLY: ${ENABLE_AUTO_REPLY:-false}
+
+services:
+  knowledge-build:
+    image: ${PYTHON_IMAGE:-python:3.12.14-slim-bookworm}
+    restart: "no"
+    network_mode: none
+    command: ["python", "/project/scripts/prepare_workflows.py"]
+    volumes:
+      - ./scripts:/project/scripts:ro
+      - ./docker/n8n:/project/docker/n8n:ro
+      - ./ambiente_gpt:/project/ambiente_gpt:ro
+      - ./knowledge:/project/knowledge
+      - ./workflows:/project/workflows
+      - ./manifest.json:/project/manifest.json
+
+  postgres:
+    image: ${POSTGRES_IMAGE:-postgres:18.6-bookworm}
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Execute scripts/configure.py}
+      N8N_DB_PASSWORD: ${N8N_DB_PASSWORD:?Execute scripts/configure.py}
+      AUTOMATION_DB_PASSWORD: ${AUTOMATION_DB_PASSWORD:?Execute scripts/configure.py}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD:?Execute scripts/configure.py}
+      TZ: ${TZ:-America/Sao_Paulo}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-55433}:5432"
+    volumes:
+      # PostgreSQL >=18 utiliza /var/lib/postgresql como ponto do volume.
+      - postgres_data:/var/lib/postgresql
+      - ./docker/postgres/01-create-databases.sh:/docker-entrypoint-initdb.d/01-create-databases.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks: [email_test]
+
+  db-migrate:
+    image: ${POSTGRES_IMAGE:-postgres:18.6-bookworm}
+    restart: "no"
+    environment:
+      PGHOST: postgres
+      PGDATABASE: atendimento
+      PGUSER: postgres
+      PGPASSWORD: ${POSTGRES_PASSWORD:?Execute scripts/configure.py}
+    command: ["psql", "-v", "ON_ERROR_STOP=1", "-f", "/sql/001-atendimento.sql"]
+    volumes:
+      - ./sql:/sql:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks: [email_test]
+
+  n8n-bootstrap:
+    image: ${N8N_IMAGE:-n8nio/n8n:2.42.5}
+    restart: "no"
+    entrypoint: ["/bin/sh", "/bootstrap/import.sh"]
+    environment:
+      <<: *n8n-environment
+      AUTOMATION_DB_PASSWORD: ${AUTOMATION_DB_PASSWORD:?Execute scripts/configure.py}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./docker/n8n:/bootstrap:ro
+      - ./workflows:/workflows:ro
+    depends_on:
+      db-migrate:
+        condition: service_completed_successfully
+      knowledge-build:
+        condition: service_completed_successfully
+    networks: [email_test]
+
+  n8n:
+    image: ${N8N_IMAGE:-n8nio/n8n:2.42.5}
+    restart: unless-stopped
+    init: true
+    environment: *n8n-environment
+    ports:
+      - "127.0.0.1:${N8N_PORT:-5679}:5678"
+    volumes:
+      - n8n_data:/home/node/.n8n
+    depends_on:
+      n8n-bootstrap:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:5678/healthz/readiness').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      start_period: 60s
+      retries: 20
+    networks: [email_test]
+
+  painel:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PYTHON_IMAGE: ${PYTHON_IMAGE:-python:3.12.14-slim-bookworm}
+    restart: unless-stopped
+    init: true
+    environment:
+      PGHOST: postgres
+      PGPORT: "5432"
+      PGDATABASE: atendimento
+      PGUSER: painel_app
+      PGPASSWORD: ${APP_DB_PASSWORD:?Execute scripts/configure.py}
+      APP_USERNAME: ${APP_USERNAME:-operador_teste}
+      AUTH_MODE: ${AUTH_MODE:-local}
+      ALLOWED_EMAILS: ${ALLOWED_EMAILS:-}
+      ENABLE_EMAIL_SEND: ${ENABLE_EMAIL_SEND:-false}
+      TZ: ${TZ:-America/Sao_Paulo}
+    ports:
+      - "127.0.0.1:${APP_PORT:-8501}:8501"
+    volumes:
+      - ./config:/app/.streamlit:ro
+    depends_on:
+      db-migrate:
+        condition: service_completed_successfully
+    networks: [email_test]
+
+volumes:
+  postgres_data:
+  n8n_data:
+
+networks:
+  email_test:

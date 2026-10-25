@@ -1,0 +1,95 @@
+{
+  "name": "01 - Atendimento QualitControl e Manut Control - receptor Gmail",
+  "nodes": [
+    {
+      "name": "Gmail Trigger",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.4,
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": true,
+        "filters": {
+          "search": "in:inbox -in:sent -in:spam -in:trash",
+          "readStatus": "unread"
+        }
+      },
+      "position": [
+        0,
+        0
+      ],
+      "id": "0f20a7ed-9e2c-47ff-bae7-89b85794cefe",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Hr5WsDxv9LK2Z2tG",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "name": "Processar cada email",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "SELECIONE_O_FLUXO_02",
+          "mode": "id"
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "position": [
+        260,
+        0
+      ],
+      "id": "b1f661c9-d826-4a15-aa44-db9072e4d5de",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "name": "Instrucoes",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "parameters": {
+        "width": 650,
+        "height": 340,
+        "content": "## Recepção Gmail\nImporte primeiro o JSON 02 (processamento). Depois importe este JSON. No nó Processar cada email, selecione o workflow 02 salvo na sua instância. Confira a credencial Gmail.\n\nA opção Run once for each item chama o subfluxo uma vez por mensagem. Consulte as subexecuções para verificar o resultado de cada atendimento; não reexecute envios incertos.\n\nAntes de ativar: configure o fluxo 02, execute sua preparação do banco, teste com mensagens próprias e confira cota Gemini. Ative somente este receptor.\n\nMensagens sem relação, revisões e envios incertos não são marcados como lidos."
+      },
+      "position": [
+        0,
+        240
+      ],
+      "id": "21423d4b-c19f-4e9a-8c4e-065172cbc71f"
+    }
+  ],
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Processar cada email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "timezone": "America/Sao_Paulo"
+  },
+  "tags": []
+}

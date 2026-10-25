@@ -1,0 +1,11 @@
+.env
+.access-local.txt
+config/secrets.toml
+__pycache__/
+*.pyc
+.venv/
+backups/
+work/
+outputs/
+*.zip
+.ruff_cache/

@@ -1,0 +1,17 @@
+{
+  "version": "qualitcontrol-base-v2-videos",
+  "status": "autorizado_para_contexto_gemini",
+  "max_context_characters": 100000,
+  "documents": [
+    {"id": "D01", "file": "Manual_Treinamento_QualitControl_Manut_Control.docx.txt", "title": "Manual de treinamento e vendas — QualitControl e Manut Control"},
+    {"id": "D02", "file": "Comparativo_ERP_vs_QualitControl_Supermercados.docx.txt", "title": "Comparativo ERP e QualitControl para supermercados"},
+    {"id": "D03", "file": "QualitControl & Manut Control para Indústrias.pptx.txt", "title": "QualitControl e Manut Control para indústrias"},
+    {"id": "D04", "file": "QualitControl para Redes de Supermercados.pptx.txt", "title": "QualitControl para redes de supermercados"},
+    {"id": "D05", "file": "Treinamento Comercial e Técnico - QualitControl.pptx.txt", "title": "Treinamento comercial e técnico"}
+  ],
+  "duplicate_versions": [
+    {"file": "Manual_Treinamento_QualitControl_Manut_Control.pdf.txt", "canonical": "D01"},
+    {"file": "Comparativo_ERP_vs_QualitControl_Supermercados.pdf.txt", "canonical": "D02"},
+    {"file": "QualitControl para Redes de Supermercados.pdf.txt", "canonical": "D04"}
+  ]
+}

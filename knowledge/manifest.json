@@ -1,0 +1,225 @@
+{
+  "version": "qualitcontrol-base-v2-videos",
+  "context_sha256": "22198d41dd3c6e1ea23661988e3080915853fe3f95fe91d25089ed184e43fa9f",
+  "characters": 40896,
+  "documents": [
+    {
+      "id": "D01",
+      "file": "Manual_Treinamento_QualitControl_Manut_Control.docx.txt",
+      "sha256": "1b118c060942eff7a4775ac622168e5e20ae639d63b10931cc67bfeb18657c26",
+      "text_sha256": "99bf6477545168e7b1ae8719e2c352d91d7fc924415e4620b319ef102a68be6a",
+      "characters": 11429
+    },
+    {
+      "id": "D02",
+      "file": "Comparativo_ERP_vs_QualitControl_Supermercados.docx.txt",
+      "sha256": "ec993bd0769927edacf86e6fdc2f70e1c62f3211458c4cdc423803f8f81f6afb",
+      "text_sha256": "99b01ee50d725711411616d185bd312597099acfc4ff02a6190d7ba5d1df8c5f",
+      "characters": 8671
+    },
+    {
+      "id": "D03",
+      "file": "QualitControl & Manut Control para Indústrias.pptx.txt",
+      "sha256": "5102ad18a44fadf6c10e30366ffbab5f9d3ecf2f1cb164bb52b59e78a19aa295",
+      "text_sha256": "9acb88dc27f32a0586685592d413d4813d8443ccd7e74d794874c915aab55169",
+      "characters": 2316
+    },
+    {
+      "id": "D04",
+      "file": "QualitControl para Redes de Supermercados.pptx.txt",
+      "sha256": "bd3c9f314c3c6690f10b6bc211b7b3c78e6598501c5b50ed81a2c80628f00521",
+      "text_sha256": "bd8528399ecedc2a2d39e5845385ff9cd996cd69c9252bbe44fd79fb0cbd404c",
+      "characters": 1984
+    },
+    {
+      "id": "D05",
+      "file": "Treinamento Comercial e Técnico - QualitControl.pptx.txt",
+      "sha256": "133570da120a7bc16f70f63242fbff5ada659ad7acac4917c786fd9f53cd51f7",
+      "text_sha256": "239ba1ab79bf53a4fd38ab1530545a009b08aa5d6c8ecf9cf7c1a351eab1ddfb",
+      "characters": 2362
+    },
+    {
+      "id": "V01",
+      "kind": "video_summary",
+      "source_url": "https://www.youtube.com/watch?v=qLA6GBKYT14",
+      "evidence_type": "descricao_publica",
+      "text_sha256": "e8edd17addafc021af0eba35d47a085d79498de98ff161d8e97b24fae00c0bff",
+      "characters": 412
+    },
+    {
+      "id": "V02",
+      "kind": "video_summary",
+      "source_url": "https://www.youtube.com/watch?v=Lxg4aQXN6ZA",
+      "evidence_type": "descricao_publica",
+      "text_sha256": "67fe84d847d50b3b58507344733696e6276b6441acd4f4ffe4d82cc4a7b2973a",
+      "characters": 404
+    },
+    {
+      "id": "V03",
+      "kind": "video_summary",
+      "source_url": "https://www.youtube.com/watch?v=UXSugLIOKnE",
+      "evidence_type": "descricao_publica",
+      "text_sha256": "e0bde97ba30ae71081b3ade2d0aee4e7477cae31823579768ba8376c23a5d092",
+      "characters": 397
+    },
+    {
+      "id": "V04",
+      "kind": "video_summary",
+      "source_url": "https://www.youtube.com/watch?v=DdDr88m2nzI",
+      "evidence_type": "transcricao_publica",
+      "text_sha256": "071a7bc20630184c68719680487ba22892982b623ffea4ee9b8cbcf441dfa06c",
+      "characters": 506
+    },
+    {
+      "id": "V05",
+      "kind": "video_summary",
+      "source_url": "https://www.youtube.com/watch?v=YhvjvzbZlzE",
+      "evidence_type": "transcricao_publica",
+      "text_sha256": "e7d59f21e6492b796fe8ad12ca8482e1051629302a1c7b4976d9f1b0d8496c58",
+      "characters": 355
+    },
+    {
+      "id": "V06",
+      "kind": "video_summary",
+      "source_url": "https://www.youtube.com/watch?v=SIm1GNEQhKM",
+      "evidence_type": "descricao_publica",
+      "text_sha256": "aab0945ece63a50d242b1afd66874ced09d14a57ee7238cefc5964371de89f9d",
+      "characters": 362
+    },
+    {
+      "id": "V07",
+      "kind": "video_summary",
+      "source_url": "https://www.youtube.com/watch?v=nSp3lwhD1wo",
+      "evidence_type": "descricao_publica",
+      "text_sha256": "22e203539a75b54c43acacf4d254744c07a777771fd1b0f1a9e02e7411b8b8da",
+      "characters": 350
+    },
+    {
+      "id": "V08",
+      "kind": "video_summary",
+      "source_url": "https://www.youtube.com/watch?v=TzPVj1KCmGo",
+      "evidence_type": "descricao_publica",
+      "text_sha256": "59e4209b703f506c1f54abac4523f0000ba8a23be9c74fdcfbaa231bf49487da",
+      "characters": 425
+    },
+    {
+      "id": "V09",
+      "kind": "video_summary",
+      "source_url": "https://www.youtube.com/watch?v=BipTRgL1yBI",
+      "evidence_type": "descricao_publica",
+      "text_sha256": "962164111fe6b6996c626de4f690f8d70f419996478ad6ebe8049a7944c29062",
+      "characters": 448
+    },
+    {
+      "id": "V10",
+      "kind": "video_summary",
+      "source_url": "https://www.youtube.com/watch?v=ouKBuompzDI",
+      "evidence_type": "descricao_publica",
+      "text_sha256": "ab16a70dcbb639ced6dea5cc4d0ddc06d9d755d3b80555368e214a434a54c797",
+      "characters": 502
+    },
+    {
+      "id": "V11",
+      "kind": "video_summary",
+      "source_url": "https://www.youtube.com/watch?v=X03CPdZAenU",
+      "evidence_type": "descricao_publica",
+      "text_sha256": "cbfc3e6f615cf8e48f2ffdf5114205207759280b7a0fb4a3a57a38d951c4fad9",
+      "characters": 425
+    },
+    {
+      "id": "V12",
+      "kind": "video_summary",
+      "source_url": "https://www.youtube.com/watch?v=GJckbPf3Cts",
+      "evidence_type": "descricao_publica",
+      "text_sha256": "8490bad575151a8906ea6838af8ca7d5e786bb73afcf5857dce0afcd806b1ffa",
+      "characters": 471
+    },
+    {
+      "id": "V13",
+      "kind": "video_summary",
+      "source_url": "https://www.youtube.com/watch?v=lY_YCvf0MdY",
+      "evidence_type": "descricao_publica",
+      "text_sha256": "4396e349b65070f620841d7a0011dd3c366284c4c195de9d1dde7aa1e30ff00a",
+      "characters": 449
+    },
+    {
+      "id": "V14",
+      "kind": "video_summary",
+      "source_url": "https://www.youtube.com/watch?v=KYsgvnU0csQ",
+      "evidence_type": "descricao_publica",
+      "text_sha256": "18f084e055ee788a2bdb47879da504a788b12303f64426385c988956a2570202",
+      "characters": 431
+    },
+    {
+      "id": "V15",
+      "kind": "video_summary",
+      "source_url": "https://www.youtube.com/watch?v=YxjQ-c3tHhQ",
+      "evidence_type": "descricao_publica",
+      "text_sha256": "535070d40412c91c000ea20975eec356f56dfefe7c8895d6868f80a8dd83e15b",
+      "characters": 425
+    },
+    {
+      "id": "V16",
+      "kind": "video_summary",
+      "source_url": "https://www.youtube.com/watch?v=2RhSHfpCdAw",
+      "evidence_type": "descricao_publica",
+      "text_sha256": "5256dbbf9f0f53f381fda1ad28292bd0ae84289dcef7d25bb4122ca22c268035",
+      "characters": 382
+    },
+    {
+      "id": "V17",
+      "kind": "video_summary",
+      "source_url": "https://www.youtube.com/watch?v=9BM-oZ3fesQ",
+      "evidence_type": "descricao_publica",
+      "text_sha256": "328ccaa7e8c08274ee3756b1146c65a9c7866f19854de1256782c5e2588bba79",
+      "characters": 384
+    },
+    {
+      "id": "V18",
+      "kind": "video_summary",
+      "source_url": "https://www.youtube.com/watch?v=g0MO-f9t0NA",
+      "evidence_type": "descricao_publica",
+      "text_sha256": "086f424c57120c359af96e7286b498afcef23cc758b1db178b82cca8e11fc9a7",
+      "characters": 381
+    },
+    {
+      "id": "V19",
+      "kind": "video_summary",
+      "source_url": "https://www.youtube.com/watch?v=Jq0uhq52t3E",
+      "evidence_type": "descricao_publica",
+      "text_sha256": "82f350cd29bb8af00ada453531e48612f919ab5d25b65a8e8480eabb7d5ef7ec",
+      "characters": 413
+    },
+    {
+      "id": "V20",
+      "kind": "video_summary",
+      "source_url": "https://www.youtube.com/watch?v=u8P2nBgJiZ4",
+      "evidence_type": "descricao_publica",
+      "text_sha256": "fc23f6cf92f9562671efdc69fcac3c15b7b7f60617ebeed97e5d58a3e1deabb1",
+      "characters": 368
+    },
+    {
+      "id": "V21",
+      "kind": "video_summary",
+      "source_url": "https://www.youtube.com/watch?v=0LWPk-bewBw",
+      "evidence_type": "descricao_publica",
+      "text_sha256": "30a47bc6b0eb35a6e624bfdee348eaefd036de62f84461c3003edd5b2c1769d8",
+      "characters": 453
+    }
+  ],
+  "duplicate_versions": [
+    {
+      "file": "Manual_Treinamento_QualitControl_Manut_Control.pdf.txt",
+      "canonical": "D01"
+    },
+    {
+      "file": "Comparativo_ERP_vs_QualitControl_Supermercados.pdf.txt",
+      "canonical": "D02"
+    },
+    {
+      "file": "QualitControl para Redes de Supermercados.pdf.txt",
+      "canonical": "D04"
+    }
+  ],
+  "strategy": "contexto_integral_por_email"
+}

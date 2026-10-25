@@ -1,0 +1,373 @@
+{
+  "id": "QCEmailHumano003",
+  "name": "TESTE | 03 - Envio de respostas humanas",
+  "active": false,
+  "nodes": [
+    {
+      "id": "d140cab6-3916-4832-9537-51c9903180e3",
+      "name": "A cada minuto",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "09daf5ee-9708-4dba-8962-b986943a6b6a",
+      "name": "Testar fila manualmente",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "parameters": {},
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "name": "Envio habilitado?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0ce7065b-a37b-4aeb-9de0-24bb48c9c5dd",
+              "leftValue": "={{ $env.ENABLE_EMAIL_SEND === 'true' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "position": [
+        250,
+        0
+      ],
+      "id": "5fc04d2e-41b6-439a-bb08-660de905a9c2"
+    },
+    {
+      "id": "eb6e7d2e-2214-41cb-9c81-4ee2e4cd4b5c",
+      "name": "Reservar envio humano",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM atendimento.reservar_envio($1,$2);",
+        "options": {
+          "queryReplacement": "={{ [$execution.id,$env.AUTOMATION_EMAIL] }}",
+          "queryBatching": "independently"
+        }
+      },
+      "position": [
+        550,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "EmailTestePostgres01",
+          "name": "PostgreSQL - Atendimento Teste"
+        }
+      }
+    },
+    {
+      "name": "Enviar resposta humana no Gmail",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "parameters": {
+        "resource": "message",
+        "operation": "reply",
+        "messageId": "={{ $json.gmail_message_id }}",
+        "emailType": "text",
+        "message": "={{ $json.reply_body }}",
+        "options": {
+          "appendAttribution": false,
+          "replyToSenderOnly": true
+        }
+      },
+      "position": [
+        850,
+        0
+      ],
+      "id": "f8db42dd-be46-415d-9401-90b43753f409",
+      "onError": "continueErrorOutput",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "EmailTesteGmail01",
+          "name": "Gmail - Conta de Testes"
+        }
+      }
+    },
+    {
+      "name": "Gmail confirmou envio?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0ce7065b-a37b-4aeb-9de0-24bb48c9c5dd",
+              "leftValue": "={{ typeof $json.id === \"string\" && $json.id.length > 0 && !$json.error }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "position": [
+        1100,
+        0
+      ],
+      "id": "89b56462-3d44-46e2-9914-c9eaaaac3efe"
+    },
+    {
+      "id": "af17eec6-d0b1-401f-8493-2f016bc18be6",
+      "name": "Registrar sucesso humano",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT atendimento.finalizar_envio($1::uuid,true,$2,'') AS salvo;",
+        "options": {
+          "queryReplacement": "={{ [$('Reservar envio humano').item.json.job_id,$json.id] }}",
+          "queryBatching": "independently"
+        }
+      },
+      "position": [
+        1350,
+        -100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "EmailTestePostgres01",
+          "name": "PostgreSQL - Atendimento Teste"
+        }
+      }
+    },
+    {
+      "name": "Confirmacao persistida?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0ce7065b-a37b-4aeb-9de0-24bb48c9c5dd",
+              "leftValue": "={{ $json.salvo === true }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "position": [
+        1550,
+        -100
+      ],
+      "id": "6385ca5b-3c8f-41b4-a398-568aa35837af"
+    },
+    {
+      "name": "Marcar original humano como lido",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "parameters": {
+        "resource": "message",
+        "operation": "markAsRead",
+        "messageId": "={{ $('Reservar envio humano').item.json.gmail_message_id }}",
+        "options": {}
+      },
+      "position": [
+        1800,
+        -100
+      ],
+      "id": "53eae4ce-0d19-438c-99c7-c8f5bcbdcd1c",
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "EmailTesteGmail01",
+          "name": "Gmail - Conta de Testes"
+        }
+      }
+    },
+    {
+      "id": "3de84c98-4ca3-4ca3-8571-e6da62dcedf9",
+      "name": "Registrar incerteza humana",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT atendimento.finalizar_envio($1::uuid,false,'',$2) AS salvo;",
+        "options": {
+          "queryReplacement": "={{ [$('Reservar envio humano').item.json.job_id,JSON.stringify($json).slice(0,2000)] }}",
+          "queryBatching": "independently"
+        }
+      },
+      "position": [
+        1350,
+        200
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "EmailTestePostgres01",
+          "name": "PostgreSQL - Atendimento Teste"
+        }
+      }
+    }
+  ],
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Sao_Paulo"
+  },
+  "connections": {
+    "A cada minuto": {
+      "main": [
+        [
+          {
+            "node": "Envio habilitado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Testar fila manualmente": {
+      "main": [
+        [
+          {
+            "node": "Envio habilitado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Envio habilitado?": {
+      "main": [
+        [
+          {
+            "node": "Reservar envio humano",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Reservar envio humano": {
+      "main": [
+        [
+          {
+            "node": "Enviar resposta humana no Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar resposta humana no Gmail": {
+      "main": [
+        [
+          {
+            "node": "Gmail confirmou envio?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Registrar incerteza humana",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail confirmou envio?": {
+      "main": [
+        [
+          {
+            "node": "Registrar sucesso humano",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Registrar incerteza humana",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar sucesso humano": {
+      "main": [
+        [
+          {
+            "node": "Confirmacao persistida?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confirmacao persistida?": {
+      "main": [
+        [
+          {
+            "node": "Marcar original humano como lido",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  }
+}

@@ -1,0 +1,16 @@
+.env
+.access-local.txt
+config/secrets.toml
+.git
+.venv
+__pycache__
+*.pyc
+tests
+workflows
+sql
+scripts
+docker
+*.zip
+ambiente_gpt
+knowledge
+work

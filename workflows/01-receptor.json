@@ -1,0 +1,95 @@
+{
+  "name": "TESTE | 01 - Receptor Gmail",
+  "nodes": [
+    {
+      "name": "Gmail Trigger",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.4,
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": true,
+        "filters": {
+          "search": "in:inbox -in:sent -in:spam -in:trash",
+          "readStatus": "unread"
+        }
+      },
+      "position": [
+        0,
+        0
+      ],
+      "id": "0f20a7ed-9e2c-47ff-bae7-89b85794cefe",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "EmailTesteGmail01",
+          "name": "Gmail - Conta de Testes"
+        }
+      }
+    },
+    {
+      "name": "Processar cada email",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "QCEmailProcesso02",
+          "mode": "id"
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "position": [
+        260,
+        0
+      ],
+      "id": "b1f661c9-d826-4a15-aa44-db9072e4d5de",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "name": "Instrucoes",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "parameters": {
+        "width": 650,
+        "height": 340,
+        "content": "Ambiente separado de testes. Configurar Gmail e AUTOMATION_EMAIL antes de publicar. O fluxo 02 já está vinculado por ID fixo."
+      },
+      "position": [
+        0,
+        240
+      ],
+      "id": "21423d4b-c19f-4e9a-8c4e-065172cbc71f"
+    }
+  ],
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Processar cada email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "timezone": "America/Sao_Paulo"
+  },
+  "tags": [],
+  "id": "QCEmailReceptor01"
+}
